@@ -4,15 +4,14 @@ using System.Collections;
 public class NewBehaviourScript : MonoBehaviour {
 
     public float jumpforce;
-
     public float heroSpeed;
-
     Animator anim;
-
     Rigidbody2D rgdBody;
-
     bool dirtoright = true;
-
+	private bool onTheGround;
+	public Transform GroundTester;
+	private float radius = 0.1f;
+	public LayerMask layerstotest;
 	void Start () {
       
         anim = GetComponent<Animator> ();
@@ -24,13 +23,14 @@ public class NewBehaviourScript : MonoBehaviour {
 
     void Update()
     {
-       
+		onTheGround = Physics2D.OverlapCircle (GroundTester.position, radius ,layerstotest);
+        
         float horizontalMove = Input.GetAxis("Horizontal");
         rgdBody.velocity = new Vector2(horizontalMove * heroSpeed, rgdBody.velocity.y);
          
         
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && onTheGround)
         {
             rgdBody.AddForce(new Vector2(0f, jumpforce));
             anim.SetTrigger("jump");
